@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'rdr3'
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
-description 'QB-Banking'
+description 'QBR-Banking'
 version '1.0.0'
 
 shared_scripts { 
@@ -30,5 +30,5 @@ files {
     'nui/scripting/jquery-ui.js',
     'nui/style.css',
     'nui/index.html',
-    'nui/qb-banking.js',
+    'nui/qbr-banking.js',
 }

@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbr-core']:GetCoreObject()
 
 Citizen.CreateThread(function()
     local ready = 0
@@ -51,16 +51,16 @@ exports('business', function(acctType, bid)
     end
 end)
 
-RegisterServerEvent('qb-banking:server:modifyBank')
-AddEventHandler('qb-banking:server:modifyBank', function(bank, k, v)
+RegisterServerEvent('qbr-banking:server:modifyBank')
+AddEventHandler('qbr-banking:server:modifyBank', function(bank, k, v)
     if banks[tonumber(bank)] then
         banks[tonumber(bank)][k] = v
-        TriggerClientEvent('qb-banking:client:syncBanks', -1, banks)
+        TriggerClientEvent('qbr-banking:client:syncBanks', -1, banks)
     end
 end)
 
 exports('modifyBank', function(bank, k, v)
-    TriggerEvent('qb-banking:server:modifyBank', bank, k, v)
+    TriggerEvent('qbr-banking:server:modifyBank', bank, k, v)
 end)
 
 exports('registerAccount', function(cid)
@@ -106,15 +106,15 @@ function checkAccountExists(acct, sc)
     return success, cid, actype
 end
 
-RegisterServerEvent('qb-base:itemUsed')
-AddEventHandler('qb-base:itemUsed', function(_src, data)
+RegisterServerEvent('qbr-base:itemUsed')
+AddEventHandler('qbr-base:itemUsed', function(_src, data)
     if data.item == "moneybag" then
-        TriggerClientEvent('qb-banking:client:usedMoneyBag', _src, data)
+        TriggerClientEvent('qbr-banking:client:usedMoneyBag', _src, data)
     end
 end)
 
-RegisterServerEvent('qb-banking:server:unpackMoneyBag')
-AddEventHandler('qb-banking:server:unpackMoneyBag', function(item)
+RegisterServerEvent('qbr-banking:server:unpackMoneyBag')
+AddEventHandler('qbr-banking:server:unpackMoneyBag', function(item)
     local _src = source
     if item ~= nil then
         local xPlayer = QBCore.Functions.GetPlayer(_src)
@@ -135,7 +135,7 @@ function format_int(number)
     return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
-QBCore.Functions.CreateCallback('qb-banking:getBankingInformation', function(source, cb)
+QBCore.Functions.CreateCallback('qbr-banking:getBankingInformation', function(source, cb)
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
@@ -162,8 +162,8 @@ QBCore.Functions.CreateCallback('qb-banking:getBankingInformation', function(sou
         end
 end)
 
-RegisterServerEvent('qb-banking:doQuickDeposit')
-AddEventHandler('qb-banking:doQuickDeposit', function(amount)
+RegisterServerEvent('qbr-banking:doQuickDeposit')
+AddEventHandler('qbr-banking:doQuickDeposit', function(amount)
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
@@ -173,15 +173,15 @@ AddEventHandler('qb-banking:doQuickDeposit', function(amount)
         local cash = xPlayer.Functions.RemoveMoney('cash', tonumber(amount), 'banking-quick-depo')
         local bank = xPlayer.Functions.AddMoney('bank', tonumber(amount), 'banking-quick-depo')
         if bank then
-            TriggerClientEvent('qb-banking:openBankScreen', src)
-            TriggerClientEvent('qb-banking:successAlert', src, 'You made a cash deposit of $'..amount..' successfully.')
-            TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', 'lightgreen', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a cash deposit of $"..amount.." successfully.")
+            TriggerClientEvent('qbr-banking:openBankScreen', src)
+            TriggerClientEvent('qbr-banking:successAlert', src, 'You made a cash deposit of $'..amount..' successfully.')
+            TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', 'lightgreen', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a cash deposit of $"..amount.." successfully.")
         end
     end
 end)
 
-RegisterServerEvent('qb-banking:doQuickWithdraw')
-AddEventHandler('qb-banking:doQuickWithdraw', function(amount, branch)
+RegisterServerEvent('qbr-banking:doQuickWithdraw')
+AddEventHandler('qbr-banking:doQuickWithdraw', function(amount, branch)
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
@@ -191,15 +191,15 @@ AddEventHandler('qb-banking:doQuickWithdraw', function(amount, branch)
         local cash = xPlayer.Functions.RemoveMoney('bank', tonumber(amount), 'banking-quick-withdraw')
         local bank = xPlayer.Functions.AddMoney('cash', tonumber(amount), 'banking-quick-withdraw')
         if cash then 
-            TriggerClientEvent('qb-banking:openBankScreen', src)
-            TriggerClientEvent('qb-banking:successAlert', src, 'You made a cash withdrawal of $'..amount..' successfully.')
-            TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', 'red', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a cash withdrawal of $"..amount.." successfully.")
+            TriggerClientEvent('qbr-banking:openBankScreen', src)
+            TriggerClientEvent('qbr-banking:successAlert', src, 'You made a cash withdrawal of $'..amount..' successfully.')
+            TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', 'red', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a cash withdrawal of $"..amount.." successfully.")
         end
     end
 end)
 
-RegisterServerEvent('qb-banking:savingsDeposit')
-AddEventHandler('qb-banking:savingsDeposit', function(amount)
+RegisterServerEvent('qbr-banking:savingsDeposit')
+AddEventHandler('qbr-banking:savingsDeposit', function(amount)
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
@@ -210,14 +210,14 @@ AddEventHandler('qb-banking:savingsDeposit', function(amount)
         local savings = savingsAccounts[xPlayer.PlayerData.citizenid].AddMoney(tonumber(amount), 'Current Account to Savings Transfer')
         while bank == nil do Wait(0) end
         while savings == nil do Wait(0) end
-        TriggerClientEvent('qb-banking:openBankScreen', src)
-        TriggerClientEvent('qb-banking:successAlert', src, 'You made a savings deposit of $'..tostring(amount)..' successfully.')
-        TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', 'lightgreen', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a savings deposit of $"..tostring(amount).." successfully..")
+        TriggerClientEvent('qbr-banking:openBankScreen', src)
+        TriggerClientEvent('qbr-banking:successAlert', src, 'You made a savings deposit of $'..tostring(amount)..' successfully.')
+        TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', 'lightgreen', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a savings deposit of $"..tostring(amount).." successfully..")
     end
 end)
 
-RegisterServerEvent('qb-banking:savingsWithdraw')
-AddEventHandler('qb-banking:savingsWithdraw', function(amount)
+RegisterServerEvent('qbr-banking:savingsWithdraw')
+AddEventHandler('qbr-banking:savingsWithdraw', function(amount)
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
@@ -228,22 +228,22 @@ AddEventHandler('qb-banking:savingsWithdraw', function(amount)
         local bank = xPlayer.Functions.AddMoney('bank', tonumber(amount), 'banking-quick-withdraw')
         while bank == nil do Wait(0) end
         while savings == nil do Wait(0) end
-        TriggerClientEvent('qb-banking:openBankScreen', src)
-        TriggerClientEvent('qb-banking:successAlert', src, 'You made a savings withdrawal of $'..tostring(amount)..' successfully.')
-        TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', 'red', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a savings withdrawal of $"..tostring(amount).." successfully.")
+        TriggerClientEvent('qbr-banking:openBankScreen', src)
+        TriggerClientEvent('qbr-banking:successAlert', src, 'You made a savings withdrawal of $'..tostring(amount)..' successfully.')
+        TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', 'red', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a savings withdrawal of $"..tostring(amount).." successfully.")
     end
 end)
 
-RegisterServerEvent('qb-banking:createSavingsAccount')
-AddEventHandler('qb-banking:createSavingsAccount', function()
+RegisterServerEvent('qbr-banking:createSavingsAccount')
+AddEventHandler('qbr-banking:createSavingsAccount', function()
     local src = source
     local xPlayer = QBCore.Functions.GetPlayer(src)
     local success = createSavingsAccount(xPlayer.PlayerData.citizenid)
     
     repeat Wait(0) until success ~= nil
-    TriggerClientEvent('qb-banking:openBankScreen', src)
-    TriggerClientEvent('qb-banking:successAlert', src, 'You have successfully opened a savings account.')
-    TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', "lightgreen", "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** opened a savings account")
+    TriggerClientEvent('qbr-banking:openBankScreen', src)
+    TriggerClientEvent('qbr-banking:successAlert', src, 'You have successfully opened a savings account.')
+    TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', "lightgreen", "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** opened a savings account")
 end)
 
 

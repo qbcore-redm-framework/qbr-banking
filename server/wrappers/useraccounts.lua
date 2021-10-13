@@ -132,7 +132,7 @@ function generateCurrent(cid)
                 genId = cardNumber
 
                 if self.source ~= -1 then
-                    TriggerClientEvent('qb-banking:client:newCardSuccess', self.source, cardNumber, friendlyName)
+                    TriggerClientEvent('qbr-banking:client:newCardSuccess', self.source, cardNumber, friendlyName)
                     local xPlayer = QBCore.Functions.GetPlayer(self.source)
                     
                     if selectedCard == "visa" then
@@ -289,8 +289,8 @@ end
 
 
 
-RegisterServerEvent('qb-banking:server:registerCurrentAccount')
-AddEventHandler('qb-banking:server:registerCurrentAccount', function(cid)
+RegisterServerEvent('qbr-banking:server:registerCurrentAccount')
+AddEventHandler('qbr-banking:server:registerCurrentAccount', function(cid)
     if not currentAccounts[cid] then
         currentAccounts[cid] = generateCurrent(cid)
     end
@@ -386,8 +386,8 @@ function generateSavings(cid)
     return rTable
 end
 
-RegisterServerEvent('qb-banking:server:registerSavingsAccount')
-AddEventHandler('qb-banking:server:registerSavingsAccount', function(cid)
+RegisterServerEvent('qbr-banking:server:registerSavingsAccount')
+AddEventHandler('qbr-banking:server:registerSavingsAccount', function(cid)
     if not savingsAccounts[cid] then
         savingsAccounts[cid] = generateSavings(cid)
     end

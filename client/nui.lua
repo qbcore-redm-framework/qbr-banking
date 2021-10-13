@@ -17,8 +17,8 @@ RegisterNUICallback("NUIFocusOff", function(data, cb)
     TriggerEvent("debug", 'Banking: Close UI', 'success')
 end)
 
-RegisterNetEvent('qb-banking:client:newCardSuccess')
-AddEventHandler('qb-banking:client:newCardSuccess', function(cardno, ctype)
+RegisterNetEvent('qbr-banking:client:newCardSuccess')
+AddEventHandler('qbr-banking:client:newCardSuccess', function(cardno, ctype)
     SendNUIMessage({
         status = "updateCard",
         number = cardno,
@@ -29,14 +29,14 @@ AddEventHandler('qb-banking:client:newCardSuccess', function(cardno, ctype)
 end)
 
 RegisterNUICallback("createSavingsAccount", function(data, cb)
-    TriggerServerEvent('qb-banking:createSavingsAccount')
+    TriggerServerEvent('qbr-banking:createSavingsAccount')
     TriggerEvent("debug", 'Banking: Create Savings Account', 'success')
 end)
 
 RegisterNUICallback("doDeposit", function(data, cb)
     if tonumber(data.amount) ~= nil and tonumber(data.amount) > 0 then
         TriggerEvent("debug", 'Banking: Deposit $' .. data.amount, 'success')
-        TriggerServerEvent('qb-banking:doQuickDeposit', data.amount)
+        TriggerServerEvent('qbr-banking:doQuickDeposit', data.amount)
         openAccountScreen()
     end
 end)
@@ -44,7 +44,7 @@ end)
 RegisterNUICallback("doWithdraw", function(data, cb)
     if tonumber(data.amount) ~= nil and tonumber(data.amount) > 0 then
         TriggerEvent("debug", 'Banking: Withdraw $' .. data.amount, 'success')
-        TriggerServerEvent('qb-banking:doQuickWithdraw', data.amount, true)
+        TriggerServerEvent('qbr-banking:doQuickWithdraw', data.amount, true)
         openAccountScreen()
     end
 end)
@@ -52,7 +52,7 @@ end)
 RegisterNUICallback("doATMWithdraw", function(data, cb)
     if tonumber(data.amount) ~= nil and tonumber(data.amount) > 0 then
         TriggerEvent("debug", 'ATM: Withdraw $' .. data.amount, 'success')
-        TriggerServerEvent('qb-banking:doQuickWithdraw', data.amount, false)
+        TriggerServerEvent('qbr-banking:doQuickWithdraw', data.amount, false)
         openAccountScreen()
     end
 end)
@@ -60,46 +60,46 @@ end)
 RegisterNUICallback("savingsDeposit", function(data, cb)
     if tonumber(data.amount) ~= nil and tonumber(data.amount) > 0 then
         TriggerEvent("debug", 'Banking: Savings Deposit ($' .. data.amount .. ')', 'success')
-        TriggerServerEvent('qb-banking:savingsDeposit', data.amount)
+        TriggerServerEvent('qbr-banking:savingsDeposit', data.amount)
         openAccountScreen()
     end
 end)
 
 RegisterNUICallback("requestNewCard", function(data, cb)
-    TriggerServerEvent('qb-banking:createNewCard')
+    TriggerServerEvent('qbr-banking:createNewCard')
 end)
 
 RegisterNUICallback("savingsWithdraw", function(data, cb)
     if tonumber(data.amount) ~= nil and tonumber(data.amount) > 0 then
         TriggerEvent("debug", 'Banking: Savings Withdraw ($' .. data.amount .. ')', 'success')
-        TriggerServerEvent('qb-banking:savingsWithdraw', data.amount)
+        TriggerServerEvent('qbr-banking:savingsWithdraw', data.amount)
         openAccountScreen()
     end
 end)
 
 RegisterNUICallback("doTransfer", function(data, cb)
     if data ~= nil then
-        TriggerServerEvent('qb-banking:initiateTransfer', data)
+        TriggerServerEvent('qbr-banking:initiateTransfer', data)
     end
 end)
 
 RegisterNUICallback("createDebitCard", function(data, cb)
     if data.pin ~= nil then
-        TriggerServerEvent('qb-banking:createBankCard', data.pin)
+        TriggerServerEvent('qbr-banking:createBankCard', data.pin)
     end
 end)
 
 RegisterNUICallback("lockCard", function(data, cb)
-    TriggerServerEvent('qb-banking:toggleCard', true)
+    TriggerServerEvent('qbr-banking:toggleCard', true)
 end)
 
 RegisterNUICallback("unLockCard", function(data, cb)
-    TriggerServerEvent('qb-banking:toggleCard', false)
+    TriggerServerEvent('qbr-banking:toggleCard', false)
 end)
 
 RegisterNUICallback("updatePin", function(data, cb)
     if data.pin ~= nil then 
-        TriggerServerEvent('qb-banking:updatePin', data.pin)
+        TriggerServerEvent('qbr-banking:updatePin', data.pin)
         TriggerEvent("debug", 'Banking: Update Pin (' .. data.pin .. ')', 'success')
     end
 end)

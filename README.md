@@ -1,2 +1,2 @@
-# qb-banking
+# qbr-banking
 Banking for RedM QBCore
