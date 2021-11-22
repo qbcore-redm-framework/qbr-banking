@@ -146,7 +146,7 @@ QBCore.Functions.CreateCallback('qbr-banking:getBankingInformation', function(so
                     ['cash'] = '$'.. format_int(xPlayer.PlayerData.money['cash']),
                     ['accountinfo'] = xPlayer.PlayerData.charinfo.account,
                 }
-                
+                --[[
                 if savingsAccounts[xPlayer.PlayerData.citizenid] then
                     local cid = xPlayer.PlayerData.citizenid
                     banking['savings'] = {
@@ -155,7 +155,7 @@ QBCore.Functions.CreateCallback('qbr-banking:getBankingInformation', function(so
                         ['statement'] = savingsAccounts[cid].getStatement(),
                     }
                 end
-
+                ]]
                 cb(banking)
         else
             cb(nil)
