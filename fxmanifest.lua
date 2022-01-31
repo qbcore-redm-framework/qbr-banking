@@ -5,7 +5,10 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 description 'QBR-banking'
 version '1.0.0'
 
-server_script 'server/*.lua'
+server_scripts {
+	'@oxmysql/lib/MySQL.lua',
+	'server/*.lua'
+}
 client_script 'client/*.lua'
 shared_scripts {
 	'config.lua'
