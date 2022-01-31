@@ -7,7 +7,7 @@ Citizen.CreateThread(function()
     local sav = 0
     local gang = 0
 
-    local accts = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Business' })
+    local accts = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Business' })
     buis = #accts
     if accts[1] ~= nil then
         for k, v in pairs(accts) do
@@ -21,7 +21,7 @@ Citizen.CreateThread(function()
     end
     ready = ready + 1
 
-    local savings = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Savings' })
+    local savings = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Savings' })
     sav = #savings
     if savings[1] ~= nil then
         for k, v in pairs(savings) do
@@ -30,7 +30,7 @@ Citizen.CreateThread(function()
     end
     ready = ready + 1
 
-    local gangs = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Gang' })
+    local gangs = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Gang' })
     gang = #gangs
     if gangs[1] ~= nil then
         for k, v in pairs(gangs) do
@@ -91,7 +91,7 @@ function checkAccountExists(acct, sc)
     local cid
     local actype
     local processed = false
-    local exists = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_number = ? AND sort_code = ?', { acct, sc })
+    local exists = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_number = ? AND sort_code = ?', { acct, sc })
     if exists[1] ~= nil then
         success = true
         cid = exists[1].character_id
