@@ -396,13 +396,16 @@ end)
 function createSavingsAccount(cid)
     local completed = false
     local success = false
-    MySQL.Async.insert('INSERT INTO bank_accounts (citizenid, amount, account_type) VALUES (?, ?, ?)', { cid, 0, 'Savings' }, function(result)
-        savingsAccounts[cid] = generateSavings(cid)
-        success = true
-        completed = true
-    end)
-    repeat Wait(0) until completed == true
-    return success
+    local getSavingsAccount = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE citizenid = ? AND account_type = ? ', { cid, "Savings" })
+    if getSavingsAccount[1] == nil then
+        MySQL.Async.insert('INSERT INTO bank_accounts (citizenid, amount, account_type) VALUES (?, ?, ?)', { cid, 0, 'Savings' }, function(result)
+            savingsAccounts[cid] = generateSavings(cid)
+            success = true
+            completed = true
+        end)
+        repeat Wait(0) until completed == true
+        return success
+    end
 end
 
 exports('createSavingsAccount', function(cid)
