@@ -39,10 +39,10 @@ Config.BankDoors = { --Doors that will always be open unless robbery has started
 	1733501235, -- main door
 	2089945615, -- main door
 	2817024187, -- main door
-	--1830999060, -- inner private door
-	--965922748, -- manager door
-	--1634115439, -- manager door
-	--1751238140, -- vault
+	1830999060, -- inner private door
+	965922748, -- manager door
+	1634115439, -- manager door
+	1751238140, -- vault
 	
 	-- West Elizabeth Co-Operative Bank Blackwater
 	531022111, -- main door
