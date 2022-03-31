@@ -2,7 +2,7 @@ local banks
 local showing, playerLoaded = false, false
 InBank = false
 blips = {}
-QBCore = exports['qbr-core']:GetCoreObject()
+
 
 RegisterNetEvent('qbr-banking:client:syncBanks')
 AddEventHandler('qbr-banking:client:syncBanks', function(data)
@@ -13,7 +13,7 @@ AddEventHandler('qbr-banking:client:syncBanks', function(data)
 end)
 
 function openAccountScreen()
-    QBCore.Functions.TriggerCallback('qbr-banking:getBankingInformation', function(banking)
+    exports['qbr-core']:TriggerCallback('qbr-banking:getBankingInformation', function(banking)
         if banking ~= nil then
             InBank = true
             SetNuiFocus(true, true)
@@ -23,12 +23,12 @@ function openAccountScreen()
             })
 
             TriggerEvent("debug", 'Banking: Open UI', 'success')
-        end        
+        end
     end)
 end
 
 function atmRefresh()
-    QBCore.Functions.TriggerCallback('qbr-banking:getBankingInformation', function(infor)
+    exports['qbr-core']:TriggerCallback('qbr-banking:getBankingInformation', function(infor)
         InBank = true
         SetNuiFocus(true, true)
         SendNUIMessage({
@@ -55,14 +55,14 @@ Citizen.CreateThread(function()
             SetBlipSprite(StoreBlip, -2128054417, 52)
             SetBlipScale(StoreBlip, 0.2)
         end
-    end     
+    end
 end)
 
 Citizen.CreateThread(function()
     for k,v in pairs(Config.BankDoors) do
         --for v, door in pairs(k) do
         Citizen.InvokeNative(0xD99229FE93B46286,v,1,1,0,0,0,0)
-        Citizen.InvokeNative(0x6BAB9442830C7F53,v,0) 
+        Citizen.InvokeNative(0x6BAB9442830C7F53,v,0)
     end
 end)
 

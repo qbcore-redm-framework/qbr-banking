@@ -1,4 +1,4 @@
-local QBCore = exports['qbr-core']:GetCoreObject()
+
 
 Citizen.CreateThread(function()
     local ready = 0
@@ -117,7 +117,7 @@ RegisterServerEvent('qbr-banking:server:unpackMoneyBag')
 AddEventHandler('qbr-banking:server:unpackMoneyBag', function(item)
     local _src = source
     if item ~= nil then
-        local xPlayer = QBCore.Functions.GetPlayer(_src)
+        local xPlayer = exports['qbr-core']:GetPlayer(_src)
         local xPlayerCID = xPlayer.PlayerData.citizenid
         local decode = json.decode(item.metapublic)
     end
@@ -125,7 +125,7 @@ end)
 
 function getCharacterName(cid)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = exports['qbr-core']:GetPlayer(src)
     local name = player.PlayerData.name
 end
 
@@ -135,9 +135,9 @@ function format_int(number)
     return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
-QBCore.Functions.CreateCallback('qbr-banking:getBankingInformation', function(source, cb)
+exports['qbr-core']:CreateCallback('qbr-banking:getBankingInformation', function(source, cb)
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     while xPlayer == nil do Wait(0) end
         if (xPlayer) then
             local banking = {
@@ -165,7 +165,7 @@ end)
 RegisterServerEvent('qbr-banking:doQuickDeposit')
 AddEventHandler('qbr-banking:doQuickDeposit', function(amount)
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentCash = xPlayer.Functions.GetMoney('cash')
 
@@ -183,14 +183,14 @@ end)
 RegisterServerEvent('qbr-banking:doQuickWithdraw')
 AddEventHandler('qbr-banking:doQuickWithdraw', function(amount, branch)
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentCash = xPlayer.Functions.GetMoney('bank')
-    
+
     if tonumber(amount) <= currentCash then
         local cash = xPlayer.Functions.RemoveMoney('bank', tonumber(amount), 'banking-quick-withdraw')
         local bank = xPlayer.Functions.AddMoney('cash', tonumber(amount), 'banking-quick-withdraw')
-        if cash then 
+        if cash then
             TriggerClientEvent('qbr-banking:openBankScreen', src)
             TriggerClientEvent('qbr-banking:successAlert', src, 'You made a cash withdrawal of $'..amount..' successfully.')
             TriggerEvent('qbr-log:server:CreateLog', 'banking', 'Banking', 'red', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.PlayerData.citizenid.." | id: "..xPlayer.PlayerData.source..")** made a cash withdrawal of $"..amount.." successfully.")
@@ -201,10 +201,10 @@ end)
 RegisterServerEvent('qbr-banking:savingsDeposit')
 AddEventHandler('qbr-banking:savingsDeposit', function(amount)
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentBank = xPlayer.Functions.GetMoney('bank')
-    
+
     if tonumber(amount) <= currentBank then
         local bank = xPlayer.Functions.RemoveMoney('bank', tonumber(amount))
         local savings = savingsAccounts[xPlayer.PlayerData.citizenid].AddMoney(tonumber(amount), 'Current Account to Savings Transfer')
@@ -219,10 +219,10 @@ end)
 RegisterServerEvent('qbr-banking:savingsWithdraw')
 AddEventHandler('qbr-banking:savingsWithdraw', function(amount)
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentSavings = savingsAccounts[xPlayer.PlayerData.citizenid].GetBalance()
-    
+
     if tonumber(amount) <= currentSavings then
         local savings = savingsAccounts[xPlayer.PlayerData.citizenid].RemoveMoney(tonumber(amount), 'Savings to Current Account Transfer')
         local bank = xPlayer.Functions.AddMoney('bank', tonumber(amount), 'banking-quick-withdraw')
@@ -237,9 +237,9 @@ end)
 RegisterServerEvent('qbr-banking:createSavingsAccount')
 AddEventHandler('qbr-banking:createSavingsAccount', function()
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local xPlayer = exports['qbr-core']:GetPlayer(src)
     local success = createSavingsAccount(xPlayer.PlayerData.citizenid)
-    
+
     repeat Wait(0) until success ~= nil
     TriggerClientEvent('qbr-banking:openBankScreen', src)
     TriggerClientEvent('qbr-banking:successAlert', src, 'You have successfully opened a savings account.')
@@ -251,11 +251,11 @@ QBCore.Commands.Add('givecash', 'Give cash to player.', {{name = 'id', help = 'P
     local src = source
 	local id = tonumber(args[1])
 	local amount = math.ceil(tonumber(args[2]))
-    
+
 	if id and amount then
-		local xPlayer = QBCore.Functions.GetPlayer(src)
-		local xReciv = QBCore.Functions.GetPlayer(id)
-		
+		local xPlayer = exports['qbr-core']:GetPlayer(src)
+		local xReciv = exports['qbr-core']:GetPlayer(id)
+
 		if xReciv and xPlayer then
 			if not xPlayer.PlayerData.metadata["isdead"] then
 				local distance = xPlayer.PlayerData.metadata["inlaststand"] and 3.0 or 10.0
