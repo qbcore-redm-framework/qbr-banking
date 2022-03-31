@@ -247,7 +247,7 @@ AddEventHandler('qbr-banking:createSavingsAccount', function()
 end)
 
 
-QBCore.Commands.Add('givecash', 'Give cash to player.', {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
+exports['qbr-core']:AddCommand('givecash', 'Give cash to player.', {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
     local src = source
 	local id = tonumber(args[1])
 	local amount = math.ceil(tonumber(args[2]))
