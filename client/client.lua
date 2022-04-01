@@ -45,7 +45,7 @@ end)
 
 Citizen.CreateThread(function()
     for banks, v in pairs(Config.BankLocations) do
-        exports['qbr-prompts']:createPrompt(v.name, v.coords, 0xF3830D8E, 'Open ' .. v.name, {
+        exports['qbr-core']:createPrompt(v.name, v.coords, 0xF3830D8E, 'Open ' .. v.name, {
             type = 'client',
             event = 'qbr-banking:openBankScreen',
             args = { false, true, false },
