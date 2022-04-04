@@ -262,25 +262,25 @@ exports['qbr-core']:AddCommand('givecash', 'Give cash to player.', {{name = 'id'
 				if #(GetEntityCoords(GetPlayerPed(src)) - GetEntityCoords(GetPlayerPed(id))) < distance then
 					if xPlayer.Functions.RemoveMoney('cash', amount) then
 						if xReciv.Functions.AddMoney('cash', amount) then
-							TriggerClientEvent('QBCore:Notify', src, "Success fully gave to ID " .. tostring(id) .. ' ' .. tostring(amount) .. '$.', "success")
-							TriggerClientEvent('QBCore:Notify', id, "Success recived gave " .. tostring(amount) .. '$ from ID ' .. tostring(src), "success")
+							TriggerClientEvent('QBCore:Notify', src, 9, "Success fully gave to ID " .. tostring(id) .. ' ' .. tostring(amount) .. '$.', 2000, 0, 'hud_textures', 'check')
+							TriggerClientEvent('QBCore:Notify', id, "Success recived gave " .. tostring(amount) .. '$ from ID ' .. tostring(src), 2000, 0, 'hud_textures', 'check')
 							TriggerClientEvent("payanimation", src)
 						else
-							TriggerClientEvent('QBCore:Notify', src, "Could not give item to the given id.", "error")
+							TriggerClientEvent('QBCore:Notify', src, 9, "Could not give item to the given id.", 2000, 0, 'mp_lobby_textures', 'cross')
 						end
 					else
-						TriggerClientEvent('QBCore:Notify', src, "You don\'t have this amount.", "error")
+						TriggerClientEvent('QBCore:Notify', src, 9, "You don\'t have this amount.", 2000, 0, 'mp_lobby_textures', 'cross')
 					end
 				else
-					TriggerClientEvent('QBCore:Notify', src, "You are too far away lmfao.", "error")
+					TriggerClientEvent('QBCore:Notify', src, 9, "You are too far away lmfao.", 2000, 0, 'mp_lobby_textures', 'cross')
 				end
 			else
-				TriggerClientEvent('QBCore:Notify', src, "You are dead LOL.", "error")
+				TriggerClientEvent('QBCore:Notify', src, 9, "You are dead LOL.", 2000, 0, 'mp_lobby_textures', 'cross')
 			end
 		else
-			TriggerClientEvent('QBCore:Notify', src, "Wrong ID.", "error")
+			TriggerClientEvent('QBCore:Notify', src, 9, "Wrong ID.", 2000, 0, 'mp_lobby_textures', 'cross')
 		end
 	else
-		TriggerClientEvent('QBCore:Notify', src, "Usage /givecash [ID] [AMOUNT]", "error")
+		TriggerClientEvent('QBCore:Notify', src, 9, "Usage /givecash [ID] [AMOUNT]", 2000, 0, 'mp_lobby_textures', 'cross')
 	end
 end)

@@ -22,7 +22,7 @@ function openAccountScreen()
                 information = banking
             })
 
-            TriggerEvent("debug", 'Banking: Open UI', 'success')
+            TriggerEvent("debug", 'Banking: Open UI', 2000, 0, 'hud_textures', 'check')
         end
     end)
 end
