@@ -16,12 +16,11 @@ body {
 }
 
 #bankingContainer {
-    background: url('https://cdn.discordapp.com/attachments/844604041514451004/880043379830952036/---4.jpg') rgba(0, 0, 0, 0.8) !important;
+    background: #F9F6EE !important;
     border-radius: 20px;
     min-height: 800px;
     max-height: 800px;
     display: none;
-    border: dashed black;
 }
 
 #v-pills-tabContent::-webkit-scrollbar,
