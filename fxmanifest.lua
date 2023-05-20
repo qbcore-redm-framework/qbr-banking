@@ -19,7 +19,7 @@ shared_scripts {
 ui_page 'nui/index.html'
 
 files {
-    'nui/images/logo.png',
+    'nui/images/*.png',
     'nui/scripting/jquery-ui.css',
     'nui/scripting/external/jquery/jquery.js',
     'nui/scripting/jquery-ui.js',
