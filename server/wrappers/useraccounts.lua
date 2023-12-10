@@ -4,25 +4,6 @@ function generateCurrent(cid)
     self.source = -1
     local processed = false
 
-    local getCurrentAccount = MySQL.query.await('SELECT * FROM bank_cards WHERE citizenid = ?', { self.cid })
-    if getCurrentAccount[1] ~= nil then
-        self.aid = getCurrentAccount[1].record_id
-        self.balance = getCurrentAccount[1].amount
-        if getCurrentAccount[1].cardActive then
-            self.cardNumber = getCurrentAccount[1].cardNumber
-            self.cardActive = getCurrentAccount[1].cardActive
-            self.cardPin    = getCurrentAccount[1].cardPin
-            self.cardLocked = getCurrentAccount[1].cardLocked
-            self.cardDecrypted = getCurrentAccount[1].cardDecrypted
-            self.cardType = getCurrentAccount[1].cardType
-            bankCards[tonumber(self.cardNumber)] = { ['pin'] = self.cardPin, ['cid'] = self.cid, ['locked'] = self.cardLocked, ['active'] = self.cardActive, ['decrypted'] = self.cardDecrypted }
-        else
-            self.cardNumber = 0
-            self.cardActive = false
-            self.cardPin    = 0
-            self.cardLocked = true
-        end
-    end
     processed = true
 
     repeat Wait(0) until processed == true
@@ -37,32 +18,6 @@ function generateCurrent(cid)
     processed = true
     repeat Wait(0) until processed == true
     processed = false
-
-    self.updateItemPin = function(pin)
-        local processed = false
-        local success
-        -- TODO: This should be turned into variables
-        local item = MySQL.query.await("SELECT * FROM `stored_items` WHERE `metaprivate` LIKE '%\"cardnumber\":"..self.cardNumber.."%' AND `metaprivate` LIKE '%\"account\":"..self.account.."%' AND `metaprivate` LIKE '%\"sortcode\":"..self.sortcode.."%' AND `type` = 'Bankcard' LIMIT 1")
-        if item[1] ~= nil then
-            itemFound = true
-            local decode = json.decode(item[1].metaprivate)
-            decode.pin = pin
-            local recode = json.encode(decode)
-            MySQL.query("UPDATE `stored_items` SET `metaprivate` = ? WHERE `record_id` = ?", { recode, item[1].record_id }, function(done)
-                if done == 1 then
-                    success = true
-                else
-                    success = false
-                end
-                processed = true
-            end)
-        else
-            success = false
-            processed = true
-        end
-        repeat Wait(0) until processed == true
-        return success
-    end
 
     self.saveAccount = function()
         local success
@@ -83,89 +38,6 @@ function generateCurrent(cid)
 
     rTable.GetBalance = function()
         return self.balance
-    end
-
-    rTable.ToggleDebitCard = function(toggle)
-        MySQL.query("UPDATE `bank_accounts` SET `cardLocked` = ? WHERE `character_id` = ? AND `record_id` = ?", { toggle, self.cid, self.aid }, function(rowsChanged)
-            if rowsChanged == 1 then
-                self.cardLocked = toggle
-                bankCards[tonumber(self.cardNumber)].locked = self.cardLocked
-            end
-        end)
-    end
-
-    rTable.generateNewCard = function(pin, scc)
-        -- Delete Old Card from Active Cards Table
-            bankCards[tonumber(self.cardNumber)] = nil
-            self.cardNumber = 0
-            self.cardActive = false
-            self.cardLocked = true
-            self.cardDecrypted = false
-            self.cardType = nil
-        if not self.cardActive then
-            local cardNumber = math.random(1000000000000000,9999999999999999)
-            local pinSet = tonumber(pin)
-            local selectedCard = scc
-            local friendlyName
-            if selectedCard == "visa" then
-                friendlyName = "Visa"
-            else
-                friendlyName = "Mastercard"
-            end
-            MySQL.query('UPDATE bank_cards SET cardnumber = ?, cardPin = ?, cardDecrypted = ?, cardActive = ?, cardLocked = ?, cardType = ? WHERE citizenid = ? AND record_id = ?', {
-                cardNumber,
-                pinSet,
-                false,
-                1,
-                0,
-                friendlyName,
-                self.cid,
-                self.aid
-            }, function(rowsChanged)
-                self.cardNumber = cardNumber
-                self.cardActive = true
-                self.cardLocked = false
-                self.cardDecrypted = false
-                self.cardType = friendlyName
-                bankCards[tonumber(self.cardNumber)] = { ['pin'] = pinSet, ['cid'] = self.cid, ['locked'] = self.cardLocked, ['active'] = self.cardActive, ['decrypted'] = self.cardDecrypted }
-                success = true
-                genId = cardNumber
-
-                if self.source ~= -1 then
-                    TriggerClientEvent('qbr-banking:client:newCardSuccess', self.source, cardNumber, friendlyName)
-                    local xPlayer = exports['qbr-core']:GetPlayer(self.source)
-
-                    if selectedCard == "visa" then
-                        xPlayer.Functions.AddItem('visa', 1)
-                    elseif selectedCard == "mastercard" then
-                        xPlayer.Functions.AddItem('mastercard', 1)
-                    end
-                end
-            end)
-        end
-    end
-
-    rTable.GetCardStatus = function()
-        return self.cardActive
-    end
-
-    rTable.GetCardDetails = function()
-        if self.cardActive then
-            local cardTable = {['cardNumber'] = tonumber(self.cardNumber), ['cardPin'] = tonumber(self.cardPin), ['cardStatus'] = self.cardActive, ['cardLocked'] = self.cardLocked, ['type'] = self.cardType }
-            return cardTable
-        else
-            return nil
-        end
-    end
-
-    rTable.UpdateDebitCardPin = function(pin)
-        MySQL.query("UPDATE `bank_accounts` SET `cardPin` = ? WHERE `character_id` = ? AND `record_id` = ?", { pin, self.cid, self.aid }, function(rowsChanged)
-            if rowsChanged == 1 then
-                self.cardPin = pin
-                self.updateItemPin(pin)
-                bankCards[tonumber(self.cardNumber)].pin = self.cardPin
-            end
-        end)
     end
 
     rTable.updateSource = function(src)
