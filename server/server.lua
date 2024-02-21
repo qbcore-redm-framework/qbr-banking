@@ -263,7 +263,7 @@ exports['qbr-core']:AddCommand('givecash', 'Give cash to player.', {{name = 'id'
 					if xPlayer.Functions.RemoveMoney('cash', amount) then
 						if xReciv.Functions.AddMoney('cash', amount) then
 							TriggerClientEvent('QBCore:Notify', src, 9, "Success fully gave to ID " .. tostring(id) .. ' ' .. tostring(amount) .. '$.', 2000, 0, 'hud_textures', 'check')
-							TriggerClientEvent('QBCore:Notify', id, "Success recived gave " .. tostring(amount) .. '$ from ID ' .. tostring(src), 2000, 0, 'hud_textures', 'check')
+							TriggerClientEvent('QBCore:Notify', id, 9, "Success received gave " .. tostring(amount) .. '$ from ID ' .. tostring(src), 2000, 0, 'hud_textures', 'check')
 							TriggerClientEvent("payanimation", src)
 						else
 							TriggerClientEvent('QBCore:Notify', src, 9, "Could not give item to the given id.", 2000, 0, 'mp_lobby_textures', 'cross')
